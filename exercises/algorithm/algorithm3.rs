@@ -3,10 +3,21 @@
 	This problem requires you to implement a sorting algorithm
 	you can use bubble sorting, insertion sorting, heap sorting, etc.
 */
-// I AM NOT DONE
 
-fn sort<T>(array: &mut [T]){
-	//TODO
+fn sort<T>(array: &mut [T])
+where
+    T: Ord + Copy,
+{
+    //TODO: 实现排序逻辑
+    // 1. 遍历数组，比较相邻元素，交换顺序
+    // 2. 重复步骤 1，直到数组有序
+    for i in 0..array.len() {
+        for j in 0..array.len() - i - 1 {
+            if array[j] > array[j + 1] {
+                array.swap(j, j + 1);
+            }
+        }
+    }
 }
 #[cfg(test)]
 mod tests {

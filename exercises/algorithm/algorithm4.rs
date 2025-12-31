@@ -3,38 +3,40 @@
 	This problem requires you to implement a basic interface for a binary tree
 */
 
-//I AM NOT DONE
 use std::cmp::Ordering;
 use std::fmt::Debug;
 
 
+// 二叉树节点结构体
 #[derive(Debug)]
 struct TreeNode<T>
 where
     T: Ord,
 {
-    value: T,
-    left: Option<Box<TreeNode<T>>>,
-    right: Option<Box<TreeNode<T>>>,
+    value: T,                          // 节点存储的值
+    left: Option<Box<TreeNode<T>>>,    // 左子节点（可选，使用 Box 进行堆分配）
+    right: Option<Box<TreeNode<T>>>,   // 右子节点（可选，使用 Box 进行堆分配）
 }
 
+// 二叉搜索树结构体
 #[derive(Debug)]
 struct BinarySearchTree<T>
 where
     T: Ord,
 {
-    root: Option<Box<TreeNode<T>>>,
+    root: Option<Box<TreeNode<T>>>,    // 根节点（可选，空树时为 None）
 }
 
 impl<T> TreeNode<T>
 where
     T: Ord,
 {
+    // 创建一个新的树节点
     fn new(value: T) -> Self {
         TreeNode {
             value,
-            left: None,
-            right: None,
+            left: None,      // 初始时没有左子节点
+            right: None,     // 初始时没有右子节点
         }
     }
 }
@@ -43,20 +45,68 @@ impl<T> BinarySearchTree<T>
 where
     T: Ord,
 {
-
+    // 创建一个空的二叉搜索树
     fn new() -> Self {
         BinarySearchTree { root: None }
     }
 
-    // Insert a value into the BST
+    // 向 BST 中插入一个值
     fn insert(&mut self, value: T) {
         //TODO
+        if let None = self.root {
+            self.root = Some(Box::new(TreeNode::new(value)));
+            return;
+        }
+        let mut current = self.root.as_mut().unwrap();
+        loop {
+            match value.cmp(&current.value) {
+                Ordering::Less => {
+                    if let None = current.left {
+                        current.left = Some(Box::new(TreeNode::new(value)));
+                        break;
+                    }
+                    current = current.left.as_mut().unwrap();
+                }
+                Ordering::Greater => {
+                    if let None = current.right {
+                        current.right = Some(Box::new(TreeNode::new(value)));
+                        break;
+                    }
+                    current = current.right.as_mut().unwrap();
+                }
+                Ordering::Equal => {
+                    break;
+                }
+            }
+        }
     }
 
-    // Search for a value in the BST
+    // 在 BST 中搜索一个值
     fn search(&self, value: T) -> bool {
         //TODO
-        true
+        if let None = self.root {
+            return false;
+        }
+        let mut current = self.root.as_ref().unwrap();
+        loop {
+            match value.cmp(&current.value) {
+                Ordering::Less => {
+                    if let None = current.left {
+                        return false;
+                    }
+                    current = current.left.as_ref().unwrap();
+                }
+                Ordering::Greater => {
+                    if let None = current.right {
+                        return false;
+                    }
+                    current = current.right.as_ref().unwrap();
+                }
+                Ordering::Equal => {
+                    return true;
+                }
+            }
+        }
     }
 }
 
@@ -64,7 +114,7 @@ impl<T> TreeNode<T>
 where
     T: Ord,
 {
-    // Insert a node into the tree
+    // 向树中插入一个节点
     fn insert(&mut self, value: T) {
         //TODO
     }
